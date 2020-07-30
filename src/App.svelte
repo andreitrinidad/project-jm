@@ -65,7 +65,7 @@
     <div data-depth="0.45" class="parallax lods__elements"></div>
     
     <div data-depth="0.15" class="parallax lods__clipper">
-      <div data-depth="-0.10" class="parallax lods__crush"></div>
+      <div data-depth="-0.20" class="parallax lods__crush"></div>
     </div>
     
 
