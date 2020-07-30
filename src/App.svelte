@@ -62,15 +62,15 @@
 
 <main on:mousemove={handleMouseMove} bind:this={mainWrapper}>
   <div class="lods" bind:this={parallaxWrapper}>
-    <div data-depth="-0.45" class="parallax lods__elements"></div>
+    <div data-depth="0.45" class="parallax lods__elements"></div>
     
     <div data-depth="0.15" class="parallax lods__clipper">
-      <div data-depth="-0.15" class="parallax lods__crush"></div>
+      <div data-depth="-0.10" class="parallax lods__crush"></div>
     </div>
     
 
     <div data-depth="0.15" class="parallax lods__bg"></div>
-    <div data-depth="-0.10" class="parallax lods__outline"></div>
+    <div data-depth="0.10" class="parallax lods__outline"></div>
   </div>
 	<h1>Awit sayo lods</h1>
 </main>
