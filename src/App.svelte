@@ -8,6 +8,7 @@
   const isSafari = typeof(DeviceMotionEvent) !== 'undefined' && typeof(DeviceMotionEvent.requestPermission) === 'function';
   let isModalHidden = !isSafari;
 
+
   const countdownMessage = [
     'Aaaahh sarado, balik ka nalang 😉',
     'Can\'t wait? Type the password 🤓',
@@ -15,7 +16,7 @@
     'Awit lods. 😂',
     'Ops wala pa hahaha! 😜',
     'Ano kaya \'to? 🤔',
-    'Wait lang tihh 🥺👉👈'
+    'Wait lang tihh 😳👉👈'
   ];
 
   let countdownText = countdownMessage[Math.floor(Math.random() * countdownMessage.length)];
@@ -23,6 +24,9 @@
   // do the parallax thing
   function handleParallax(e) {
     e.stopPropagation();
+
+    if (!parallaxWrapper) return;
+
     let x = Math.floor(e.clientX - parallaxWrapper.offsetLeft);
     let y = Math.floor(e.clientY - parallaxWrapper.offsetTop);
     let rotatedY =  Math.min(Math.max(parseInt(Math.floor(e.gamma * -1)), -45), 45);
@@ -66,6 +70,10 @@
   function dontClickMe() {
     countdownText = countdownMessage[Math.floor(Math.random() * countdownMessage.length)];
   }
+
+  console.clear();
+  console.log("%cLooking for something? HAHA!","font-family:sans-serif; font-size: 40px");
+  console.log("%cEh kung ikiss nalang kaya kita jks","color: #55555555");
 </script>
 
 <svelte:window on:deviceorientation={handleParallax}/>
@@ -73,11 +81,11 @@
 <svelte:head>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;500&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎉</text></svg>">
-  <title>Happy birthday!</title>
+  <title>Lods</title>
 </svelte:head>
 
 <main on:mousemove={handleParallax}>
-  <Countdown from="2020-7-31 23:25:50" format="YYYY-MM-DD H:m:s" zone="Asia/Manila" let:remaining>
+  <Countdown from="2020-8-1 00:00:00" format="YYYY-MM-DD H:m:s" zone="Asia/Shanghai" let:remaining>
     {#if remaining.done === false}
       <div class="texts">
         <h1>{ countdownText }</h1>
@@ -87,7 +95,7 @@
         <span>{remaining.minutes}m</span>
         <span>{remaining.seconds}s</span>
         <br><br>
-        <button on:click={dontClickMe}>Don't click me</button>
+        <button on:click={dontClickMe} class="secondary">Don't click me</button>
       </div>
       {:else}
       <div class="lods" bind:this={parallaxWrapper} transition:fly="{{ y: 200, duration: 500 }}">
