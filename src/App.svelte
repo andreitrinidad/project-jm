@@ -246,6 +246,7 @@
       background-size: 700px 700px;
       // background-blend-mode: screen;
       mix-blend-mode: overlay;
+      pointer-events: none;
       z-index: 10;
     }
 
