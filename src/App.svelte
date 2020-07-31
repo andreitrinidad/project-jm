@@ -77,7 +77,7 @@
 </svelte:head>
 
 <main on:mousemove={handleParallax}>
-  <Countdown from="2020-7-31 11:25:00" format="YYYY-MM-DD H:m:s" zone="Asia/Manila" let:remaining>
+  <Countdown from="2020-7-31 23:25:50" format="YYYY-MM-DD H:m:s" zone="Asia/Manila" let:remaining>
     {#if remaining.done === false}
       <div class="texts">
         <h1>{ countdownText }</h1>
