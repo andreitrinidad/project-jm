@@ -73,7 +73,7 @@
 
   console.clear();
   console.log("%cLooking for something? HAHA!","font-family:sans-serif; font-size: 40px");
-  console.log("%cEh kung ikiss nalang kaya kita jks","color: #55555555");
+  console.log("%cEh kung i-kiss nalang kaya kita jks","color: #55555555");
 </script>
 
 <svelte:window on:deviceorientation={handleParallax}/>
@@ -85,7 +85,7 @@
 </svelte:head>
 
 <main on:mousemove={handleParallax}>
-  <Countdown from="2020-8-1 00:00:00" format="YYYY-MM-DD H:m:s" zone="Asia/Shanghai" let:remaining>
+  <Countdown from="2020-8-5 00:00:00" format="YYYY-MM-DD H:m:s" zone="Asia/Shanghai" let:remaining>
     {#if remaining.done === false}
       <div class="texts">
         <h1>{ countdownText }</h1>
@@ -194,25 +194,6 @@
     height: 90vw;
     max-width: 500px;
     max-height: 500px;
-    // text-align: center;
-
-    &:after {
-      position: absolute;
-      content: '';
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      // background: white;
-      // z-index: 7;
-
-      // background-image: url('/images/texture2.png');
-      // background-size: 100px 100px;
-      // box-shadow: 0px 0px 50px rgba(black, 0.1);
-
-    }
-
-
 
     %position {
       position: absolute;
@@ -222,7 +203,7 @@
       bottom: 0;
       background-repeat: no-repeat;
       background-position: center center;
-      transition: transform .4s ease-out;
+      // transition: transform 0s ease-in-out 100ms;
     }
 
     > div  {
