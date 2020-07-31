@@ -32,7 +32,7 @@
     parallaxElements.forEach(element => {
       const depth = element.dataset.depth;
       const moveX = isMobile ? ((containerWidth/2) * rotatedY) / 400 : ((containerWidth / 2) - x) * (strength * depth);
-      const moveY = isMobile ? ((containerWidth/2) * rotatedX) / 450 : ((containerHeight / 2) - y) * (strength * depth);
+      const moveY = isMobile ? ((containerWidth/2) * rotatedX) / 700 : ((containerHeight / 2) - y) * (strength * depth);
       element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
     });
   }
