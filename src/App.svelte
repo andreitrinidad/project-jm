@@ -19,7 +19,7 @@
     let y = Math.floor(e.clientY - parallaxWrapper.offsetTop);
 
     let rotatedY =  Math.min(Math.max(parseInt(Math.floor(e.gamma)), -45), 45);
-    let rotatedX = Math.min(Math.max(parseInt(Math.floor(event.beta)), -45), 45);
+    let rotatedX = Math.min(Math.max(parseInt(Math.floor(e.beta)), -45), 45);
 
     
     // get child elements
@@ -29,8 +29,8 @@
 
     parallaxElements.forEach(element => {
       const depth = element.dataset.depth;
-      const moveX = isMobile ? ((containerWidth/2) * rotatedY) / 45 : ((containerWidth / 2) - x) * (strength * depth);
-      const moveY = isMobile ? ((containerWidth/2) * rotatedX) / 45 : ((containerHeight / 2) - y) * (strength * depth);
+      const moveX = isMobile ? ((containerWidth/2) * rotatedY) / 400 : ((containerWidth / 2) - x) * (strength * depth);
+      const moveY = isMobile ? ((containerWidth/2) * rotatedX) / 450 : ((containerHeight / 2) - y) * (strength * depth);
       element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
     });
   }
@@ -59,6 +59,8 @@
 </main>
 
 <style type="text/scss">
+  @import './scss/breakpoint';
+
   :global(body), * {
     margin: 0;
     padding: 0;
@@ -67,24 +69,26 @@
 
   .lods {
     position: relative;
-    width: 500px;
-    height: 500px;
+    width: 90%;
+    height: 90%;
+    max-width: 500px;
+    max-height: 500px;
 
-    &:before {
-      position: absolute;
-      content: '';
-      top: -40px;
-      left: -40px;
-      right: -40px;
-      bottom: -40px;
-      // background: white;
-      // z-index: -1;
+    // &:before {
+    //   position: absolute;
+    //   content: '';
+    //   top: -40px;
+    //   left: -40px;
+    //   right: -40px;
+    //   bottom: -40px;
+    //   // background: white;
+    //   // z-index: -1;
 
-      // background-image: url('/images/texture2.png');
-      // background-size: 1000px 1000px;
-      // box-shadow: 0px 0px 50px rgba(black, 0.1);
+    //   // background-image: url('/images/texture2.png');
+    //   // background-size: 1000px 1000px;
+    //   // box-shadow: 0px 0px 50px rgba(black, 0.1);
 
-    }
+    // }
 
 
 
@@ -106,15 +110,18 @@
 
     &__elements {
       background-image: url('/images/elements.svg');
+      background-size: 80%;
+      
       z-index: 5;
     }
 
 
     &__clipper{
+      
       // background-color: red;
       -webkit-mask-image: url('/images/clipper.svg');
       -webkit-mask-repeat: no-repeat;
-      -webkit-mask-size: 90%;
+      -webkit-mask-size: 80%;
       -webkit-mask-position: center;
       z-index: 4;
     }
@@ -124,7 +131,7 @@
       @extend %position;
 
       background-image: url('/images/her.svg');
-      background-size: 400px 400px;
+      background-size: 40% auto;
       z-index: 3;
     }
 
@@ -133,12 +140,14 @@
 
     &__bg {
       background-image: url('/images/bg.svg');
-      background-size: 90%;
+      background-size: 80%;
       z-index: 2;
     }
 
     &__outline {
       background-image: url('/images/outline.svg');
+      background-size: 90%;
+      
       z-index: 1;
     }
   }
