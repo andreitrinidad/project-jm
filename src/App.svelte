@@ -32,19 +32,20 @@
 
   //for iOS
 
- function requestDevicePermission() {
-  if (isSafari) {
-    DeviceOrientationEvent.requestPermission()
-      .then(response => {
-        if (response == 'granted') {
-          console.alert('Thanks!');
-          isModalHidden = true;
-        }
-      })
-      .catch(console.error)
+  function requestDevicePermission() {
+    if (isSafari) {
+      DeviceOrientationEvent.requestPermission()
+        .then(response => {
+          if (response == 'granted') {
+            console.alert('Thanks!');
+            isModalHidden = true;
+          }
+        })
+        .catch(console.error)
+      isModalHidden = true;
     }
     else {
-        alert('Wait, this isn\'t an iOS device');
+      alert('Wait, this isn\'t an iOS device');
     }
   }
 
