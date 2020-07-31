@@ -2,27 +2,20 @@
   let theX, theY;
   let strength = 0.075;
   let parallaxWrapper;
-
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
+  const isSafari = typeof(DeviceMotionEvent) !== 'undefined' && typeof(DeviceMotionEvent.requestPermission) === 'function';
 
-  console.log(isMobile);
+  let isModalHidden = !isSafari;
 
+  // let isModalHidden = false;
 
   // do the parallax thing
   function handleParallax(e) {
-
     e.stopPropagation();
-
-  
-    
     let x = Math.floor(e.clientX - parallaxWrapper.offsetLeft);
     let y = Math.floor(e.clientY - parallaxWrapper.offsetTop);
-
     let rotatedY =  Math.min(Math.max(parseInt(Math.floor(e.gamma * -1)), -45), 45);
     let rotatedX = Math.min(Math.max(parseInt(Math.floor(e.beta * -1)), -45), 45);
-
-    // console.log('rotatedYinvert => ',rotatedY * -1);
-    // console.log('rotatedY => ',rotatedY);
 
     // get child elements
     const parallaxElements = parallaxWrapper.querySelectorAll('.parallax');
@@ -36,6 +29,27 @@
       element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
     });
   }
+
+  //for iOS
+
+ function requestDevicePermission() {
+  if (isSafari) {
+    DeviceOrientationEvent.requestPermission()
+      .then(response => {
+        if (response == 'granted') {
+          console.alert('Thanks!');
+        }
+      })
+      .catch(console.error)
+    }
+    else {
+        alert('Wait, this isn\'t an iOS device');
+    }
+  }
+
+  function hideModal() {
+    isModalHidden = true;
+  }
 </script>
 
 <svelte:window on:deviceorientation={handleParallax}/>
@@ -44,19 +58,36 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;500&display=swap" rel="stylesheet">
 </svelte:head>
 
+
+
+
 <main on:mousemove={handleParallax}>
   <div class="lods" bind:this={parallaxWrapper}>
     <div data-depth="-0.95" class="parallax lods__elements"></div>
-    
     <div data-depth="-0.15" class="parallax lods__clipper">
       <div data-depth="0.20" class="parallax lods__crush"></div>
     </div>
-    
-
     <div data-depth="-0.15" class="parallax lods__bg"></div>
     <div data-depth="0.10" class="parallax lods__outline"></div>
   </div>
-	<h1>Awit sayo lods x</h1>
+
+  <div class="texts">
+    <h1>Happy Birthday <span> Jannie 🎉</span></h1>
+    <h4>from yours truly—Andrei ✨</h4>
+  </div>
+	
+  <!-- {#if isSafari} -->
+
+  <div class="modal {isModalHidden && 'modal--hidden'}">
+    <div>
+      <h2>Oh snap! iOS is a special snowflake</h2>
+      <h3>Can you allow some permissions for me?</h3>
+      <button class="secondary" on:click={hideModal}>No</button>
+      <button on:click={requestDevicePermission}>Sure!</button>
+    </div>
+  </div>
+  <!-- {/if} -->
+
 
 </main>
 
@@ -69,28 +100,78 @@
     box-sizing: border-box;
   }
 
+  //global 
+
+  button {
+    background-color: #333;
+    color: white;
+    padding: 20px 10px;
+    border-radius: 20px;
+    width: 100px;
+
+      
+    &.secondary {
+      background-color: transparent;
+      border: solid 1px #333;
+      color: #333;
+    }
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background: #f5f5f5;
+    background-image: url('/images/texture.png');
+    background-size: 1000px 1000px;
+    z-index: 10;
+
+    > div {
+      padding: 50px;
+      text-align: center;
+    }
+
+    h3 {
+      margin-bottom: 30px;
+    }
+
+    &--hidden {
+      display: none;
+    }
+
+    h2, h3 {
+      font-weight: 300;
+    }
+  }
+
   .lods {
     position: relative;
-    width: 90%;
-    height: 90%;
+    width: 90vw;
+    height: 90vw;
     max-width: 500px;
     max-height: 500px;
+    // text-align: center;
 
-    // &:before {
-    //   position: absolute;
-    //   content: '';
-    //   top: -40px;
-    //   left: -40px;
-    //   right: -40px;
-    //   bottom: -40px;
-    //   // background: white;
-    //   // z-index: -1;
+    &:after {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      // background: white;
+      // z-index: 7;
 
-    //   // background-image: url('/images/texture2.png');
-    //   // background-size: 1000px 1000px;
-    //   // box-shadow: 0px 0px 50px rgba(black, 0.1);
+      // background-image: url('/images/texture2.png');
+      // background-size: 100px 100px;
+      // box-shadow: 0px 0px 50px rgba(black, 0.1);
 
-    // }
+    }
 
 
 
@@ -107,20 +188,15 @@
 
     > div  {
       @extend %position;
-   
     }
 
     &__elements {
       background-image: url('/images/elements.svg');
       background-size: 80%;
-      
       z-index: 5;
     }
 
-
     &__clipper{
-      
-      // background-color: red;
       -webkit-mask-image: url('/images/clipper.svg');
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-size: 80%;
@@ -128,17 +204,12 @@
       z-index: 4;
     }
 
-
     &__crush {
       @extend %position;
-
       background-image: url('/images/her.svg');
       background-size: 40% auto;
       z-index: 3;
     }
-
-
-
 
     &__bg {
       background-image: url('/images/bg.svg');
@@ -149,7 +220,6 @@
     &__outline {
       background-image: url('/images/outline.svg');
       background-size: 90%;
-      
       z-index: 1;
     }
   }
@@ -159,16 +229,38 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
-    background: #f5f5f5;
-    background-image: url('/images/texture.png');
-    background-size: 1000px 1000px;
     height: 100vh;
     width: 100vw;
     font-family: 'Roboto Slab', serif;
-  
-    h1 {
-      font-weight: 300;
+
+    &:after {
+      position: absolute;
+      content: '';
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-image: url('/images/texture.png');
+      background-size: 700px 700px;
+      // background-blend-mode: screen;
+      mix-blend-mode: overlay;
+      z-index: 10;
     }
+
+    div.texts {
+      width: 90vw;
+      max-width: 300px;
+      text-align: center;
+
+      h1 {
+        font-weight: 300;
+      }
+      h4 {
+        font-weight: 500;
+        // text-align: right;
+        margin-top: 20px;
+      }
+    }
+  
   }
 </style>
