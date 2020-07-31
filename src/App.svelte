@@ -38,6 +38,7 @@
       .then(response => {
         if (response == 'granted') {
           console.alert('Thanks!');
+          isModalHidden = true;
         }
       })
       .catch(console.error)
