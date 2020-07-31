@@ -18,10 +18,12 @@
     let x = Math.floor(e.clientX - parallaxWrapper.offsetLeft);
     let y = Math.floor(e.clientY - parallaxWrapper.offsetTop);
 
-    let rotatedY =  Math.min(Math.max(parseInt(Math.floor(e.gamma)), -45), 45);
-    let rotatedX = Math.min(Math.max(parseInt(Math.floor(e.beta)), -45), 45);
+    let rotatedY =  Math.min(Math.max(parseInt(Math.floor(e.gamma * -1)), -45), 45);
+    let rotatedX = Math.min(Math.max(parseInt(Math.floor(e.beta * -1)), -45), 45);
 
-    
+    // console.log('rotatedYinvert => ',rotatedY * -1);
+    // console.log('rotatedY => ',rotatedY);
+
     // get child elements
     const parallaxElements = parallaxWrapper.querySelectorAll('.parallax');
     const containerWidth = parallaxWrapper.offsetWidth;
