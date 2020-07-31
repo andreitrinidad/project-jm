@@ -1,78 +1,61 @@
 <script>
-
-  let x, y;
-
-
+  let theX, theY;
   let strength = 0.075;
-
-
-  // binded container
   let parallaxWrapper;
-  let mainWrapper;
 
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
 
-  // x = mainWrapper.clientX;
-  // y = mainWrapper.clientY;
+  console.log(isMobile);
 
 
   // do the parallax thing
-  function handleMouseMove(e) {
+  function handleParallax(e) {
+
     e.stopPropagation();
+
+  
     
-    x = Math.floor(e.clientX - parallaxWrapper.offsetLeft);
-    y = Math.floor(e.clientY - parallaxWrapper.offsetTop);
+    let x = Math.floor(e.clientX - parallaxWrapper.offsetLeft);
+    let y = Math.floor(e.clientY - parallaxWrapper.offsetTop);
 
-    //  Math.floor(e.clientX - $(this).offset().left)
+    let rotatedY =  Math.min(Math.max(parseInt(Math.floor(e.gamma)), -45), 45);
+    let rotatedX = Math.min(Math.max(parseInt(Math.floor(event.beta)), -45), 45);
 
+    
     // get child elements
     const parallaxElements = parallaxWrapper.querySelectorAll('.parallax');
-
     const containerWidth = parallaxWrapper.offsetWidth;
     const containerHeight = parallaxWrapper.offsetHeight;
 
-    console.log('y => ', parallaxWrapper.offsetHeight);
-
-    
-
     parallaxElements.forEach(element => {
       const depth = element.dataset.depth;
-      const moveX = ((containerWidth / 2) - x) * (strength * depth);
-      const moveY = ((containerHeight / 2) - y) * (strength * depth);
-
-      // console.log('moveX => ', moveX);
-      // element.innerHTML = moveX;
-
+      const moveX = isMobile ? ((containerWidth/2) * rotatedY) / 45 : ((containerWidth / 2) - x) * (strength * depth);
+      const moveY = isMobile ? ((containerWidth/2) * rotatedX) / 45 : ((containerHeight / 2) - y) * (strength * depth);
       element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
     });
-
   }
-
-
-
-  
-
-
 </script>
 
+<svelte:window on:deviceorientation={handleParallax}/>
 
 <svelte:head>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;500&display=swap" rel="stylesheet">
 </svelte:head>
 
-
-<main on:mousemove={handleMouseMove} bind:this={mainWrapper}>
+<main on:mousemove={handleParallax}>
   <div class="lods" bind:this={parallaxWrapper}>
-    <div data-depth="0.45" class="parallax lods__elements"></div>
+    <div data-depth="-0.45" class="parallax lods__elements"></div>
     
-    <div data-depth="0.15" class="parallax lods__clipper">
-      <div data-depth="-0.20" class="parallax lods__crush"></div>
+    <div data-depth="-0.15" class="parallax lods__clipper">
+      <div data-depth="0.20" class="parallax lods__crush"></div>
     </div>
     
 
-    <div data-depth="0.15" class="parallax lods__bg"></div>
-    <div data-depth="0.10" class="parallax lods__outline"></div>
+    <div data-depth="-0.15" class="parallax lods__bg"></div>
+    <div data-depth="-0.10" class="parallax lods__outline"></div>
   </div>
-	<h1>Awit sayo lods</h1>
+	<h1>Awit sayo lods x</h1>
+
 </main>
 
 <style type="text/scss">
@@ -87,6 +70,24 @@
     width: 500px;
     height: 500px;
 
+    &:before {
+      position: absolute;
+      content: '';
+      top: -40px;
+      left: -40px;
+      right: -40px;
+      bottom: -40px;
+      // background: white;
+      // z-index: -1;
+
+      // background-image: url('/images/texture2.png');
+      // background-size: 1000px 1000px;
+      // box-shadow: 0px 0px 50px rgba(black, 0.1);
+
+    }
+
+
+
     %position {
       position: absolute;
       top: 0;
@@ -100,6 +101,7 @@
 
     > div  {
       @extend %position;
+   
     }
 
     &__elements {
@@ -114,7 +116,7 @@
       -webkit-mask-repeat: no-repeat;
       -webkit-mask-size: 90%;
       -webkit-mask-position: center;
-      z-index: 4
+      z-index: 4;
     }
 
 
