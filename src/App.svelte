@@ -1,13 +1,24 @@
 <script>
-  let theX, theY;
+  import Countdown from 'svelte-countdown';
+  import { fly } from 'svelte/transition';
+
   let strength = 0.075;
   let parallaxWrapper;
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
   const isSafari = typeof(DeviceMotionEvent) !== 'undefined' && typeof(DeviceMotionEvent.requestPermission) === 'function';
-
   let isModalHidden = !isSafari;
 
-  // let isModalHidden = false;
+  const countdownMessage = [
+    'Aaaahh sarado, balik ka nalang 😉',
+    'Can\'t wait? Type the password 🤓',
+    'Getting things ready... ⏳',
+    'Awit lods. 😂',
+    'Ops wala pa hahaha! 😜',
+    'Ano kaya \'to? 🤔',
+    'Wait lang tihh 🥺👉👈'
+  ];
+
+  let countdownText = countdownMessage[Math.floor(Math.random() * countdownMessage.length)];
 
   // do the parallax thing
   function handleParallax(e) {
@@ -30,7 +41,6 @@
     });
   }
 
-  //for iOS
 
   function requestDevicePermission() {
     if (isSafari) {
@@ -52,6 +62,10 @@
   function hideModal() {
     isModalHidden = true;
   }
+
+  function dontClickMe() {
+    countdownText = countdownMessage[Math.floor(Math.random() * countdownMessage.length)];
+  }
 </script>
 
 <svelte:window on:deviceorientation={handleParallax}/>
@@ -62,26 +76,34 @@
   <title>Happy birthday!</title>
 </svelte:head>
 
-
-
-
 <main on:mousemove={handleParallax}>
-  <div class="lods" bind:this={parallaxWrapper}>
-    <div data-depth="-0.95" class="parallax lods__elements"></div>
-    <div data-depth="-0.15" class="parallax lods__clipper">
-      <div data-depth="0.20" class="parallax lods__crush"></div>
-    </div>
-    <div data-depth="-0.15" class="parallax lods__bg"></div>
-    <div data-depth="0.10" class="parallax lods__outline"></div>
-  </div>
-
-  <div class="texts">
-    <h1>Happy Birthday <span> Jannie 🎉</span></h1>
-    <h4>from yours truly—Andrei ✨</h4>
-  </div>
-	
-  <!-- {#if isSafari} -->
-
+  <Countdown from="2020-7-31 11:25:00" format="YYYY-MM-DD H:m:s" zone="Asia/Manila" let:remaining>
+    {#if remaining.done === false}
+      <div class="texts">
+        <h1>{ countdownText }</h1>
+        <br>
+        <span>{remaining.days}d</span>
+        <span>{remaining.hours}h</span>
+        <span>{remaining.minutes}m</span>
+        <span>{remaining.seconds}s</span>
+        <br><br>
+        <button on:click={dontClickMe}>Don't click me</button>
+      </div>
+      {:else}
+      <div class="lods" bind:this={parallaxWrapper} transition:fly="{{ y: 200, duration: 500 }}">
+        <div data-depth="-0.95" class="parallax lods__elements"></div>
+        <div data-depth="-0.15" class="parallax lods__clipper">
+          <div data-depth="0.20" class="parallax lods__crush"></div>
+        </div>
+        <div data-depth="-0.15" class="parallax lods__bg"></div>
+        <div data-depth="0.10" class="parallax lods__outline"></div>
+      </div>
+      <div class="texts">
+        <h1>Happy Birthday <span> Jannie 🎉</span></h1>
+        <h4>from yours truly—Andrei ✨</h4>
+      </div>
+    {/if}
+  </Countdown>
   <div class="modal {isModalHidden && 'modal--hidden'}">
     <div>
       <h2>Oh snap! iOS is a special snowflake</h2>
@@ -90,9 +112,6 @@
       <button on:click={requestDevicePermission}>Sure!</button>
     </div>
   </div>
-  <!-- {/if} -->
-
-
 </main>
 
 <style type="text/scss">
@@ -105,15 +124,23 @@
   }
 
   //global 
-
   button {
     background-color: #333;
     color: white;
-    padding: 20px 10px;
+    padding: 20px;
     border-radius: 20px;
-    width: 100px;
+    min-width: 100px;
+    transition: transform 200ms ease-in-out;
+    cursor: pointer;
 
-      
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
     &.secondary {
       background-color: transparent;
       border: solid 1px #333;
@@ -244,6 +271,8 @@
       right: 0;
       bottom: 0;
       left: 0;
+      height: 100%;
+      width: 100%;
       background-image: url('/images/texture.png');
       background-size: 700px 700px;
       // background-blend-mode: screen;
