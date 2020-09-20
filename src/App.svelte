@@ -107,8 +107,8 @@
         <div data-depth="0.10" class="parallax lods__outline"></div>
       </div>
       <div class="texts">
-        <h1>Belated Happy Birthday 🎉</h1>
-        <h4>from yours truly—Andrei ✨</h4>
+        <h1>Keep safe! stay Covid-free 😂</h1>
+        <h4>— Andrei</h4>
       </div>
     {/if}
   </Countdown>
